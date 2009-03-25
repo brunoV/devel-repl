@@ -3,7 +3,7 @@ package Devel::REPL::Plugin::FancyPrompt;
 use Devel::REPL::Plugin;
 use namespace::clean -except => [ 'meta' ];
 
-with 'Devel::REPL::Term::Prompt';
+with 'Devel::REPL::Plugin::Term::Prompt';
 
 has 'fancy_prompt' => (
   is => 'rw', lazy => 1,
