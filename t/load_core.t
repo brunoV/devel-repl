@@ -11,7 +11,6 @@ use_ok('Devel::REPL::Plugin::FancyPrompt');
 use_ok('Devel::REPL::Plugin::FindVariable');
 use_ok('Devel::REPL::Plugin::History');
 use_ok('Devel::REPL::Plugin::Interrupt');
-use_ok('Devel::REPL::Plugin::NewlineHack');
 use_ok('Devel::REPL::Plugin::OutputCache');
 use_ok('Devel::REPL::Plugin::Packages');
 use_ok('Devel::REPL::Plugin::Peek');
