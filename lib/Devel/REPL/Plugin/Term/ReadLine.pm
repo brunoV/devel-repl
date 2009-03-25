@@ -1,14 +1,11 @@
 package Devel::REPL::Plugin::Term::ReadLine;
 use Devel::REPL::Plugin;
 
+with 'Devel::REPL::Plugin::Term::Prompt';
+
 has 'term' => (
   is => 'rw', required => 1,
   default => sub { Term::ReadLine->new('Perl REPL') }
-);
-
-has 'prompt' => (
-  is => 'rw', required => 1,
-  default => sub { '$ ' }
 );
 
 has 'out_fh' => (
@@ -18,7 +15,9 @@ has 'out_fh' => (
 
 around read => sub {
   my ($next, $self) = @_;
-  return $self->term->readline($self->prompt);
+  my $line = $self->term->readline($self->prompt);
+  $self->done(1) if !defined $line;
+  return $line;
 };
 
 around print => sub {

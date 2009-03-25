@@ -11,11 +11,16 @@ with 'MooseX::Object::Pluggable';
 
 use Devel::REPL::Error;
 
+has 'done' => (
+    is       => 'rw',
+    isa      => 'Bool',
+    required => 1,
+    default  => sub { 0 },
+);
+
 sub run {
   my ($self) = @_;
-  while ($self->run_once_safely) {
-    # keep looping
-  }
+  $self->run_once_safely until $self->done;
 }
 
 sub run_once_safely {
@@ -34,7 +39,6 @@ sub run_once {
   my ($self, $input) = @_;
 
   my $line = $self->read($input);
-  return unless defined($line); # undefined value == EOF
 
   my @ret = $self->formatted_eval($line);
 
@@ -61,7 +65,6 @@ sub format {
 
 sub format_result {
   my ( $self, @stuff ) = @_;
-
   return @stuff;
 }
 
@@ -76,13 +79,13 @@ sub is_error {
 }
 
 sub read {
-    my ($self, $line) = @_;
-    return $line;
+  my ($self, $line) = @_;
+  return $line;
 }
 
 sub print {
-    my ($self, $output) = @_;
-    return $output;
+  my ($self, $output) = @_;
+  return $output;
 }
 
 sub eval {
