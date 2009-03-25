@@ -11,21 +11,6 @@ with 'MooseX::Object::Pluggable';
 
 use Devel::REPL::Error;
 
-has 'term' => (
-  is => 'rw', required => 1,
-  default => sub { Term::ReadLine->new('Perl REPL') }
-);
-
-has 'prompt' => (
-  is => 'rw', required => 1,
-  default => sub { '$ ' }
-);
-
-has 'out_fh' => (
-  is => 'rw', required => 1, lazy => 1,
-  default => sub { shift->term->OUT || \*STDOUT; }
-);
-
 sub run {
   my ($self) = @_;
   while ($self->run_once_safely) {
@@ -38,26 +23,22 @@ sub run_once_safely {
 
   my $ret = eval { $self->run_once(@args) };
 
-  if ($@) {
-    my $error = $@;
-    eval { $self->print("Error! - $error\n"); };
-    return 1;
-  } else {
-    return $ret;
+  if (my $error = $@) {
+    return eval { $self->print("Error! - $error\n"); };
   }
+
+  return 1;
 }
 
 sub run_once {
-  my ($self) = @_;
+  my ($self, $input) = @_;
 
-  my $line = $self->read;
+  my $line = $self->read($input);
   return unless defined($line); # undefined value == EOF
 
   my @ret = $self->formatted_eval($line);
 
-  $self->print(@ret);
-
-  return 1;
+  return $self->print(@ret);
 }
 
 sub formatted_eval {
@@ -95,8 +76,13 @@ sub is_error {
 }
 
 sub read {
-  my ($self) = @_;
-  return $self->term->readline($self->prompt);
+    my ($self, $line) = @_;
+    return $line;
+}
+
+sub print {
+    my ($self, $output) = @_;
+    return $output;
 }
 
 sub eval {
@@ -133,14 +119,6 @@ sub execute {
 sub error_return {
   my ($self, $type, $error) = @_;
   return Devel::REPL::Error->new( type => $type, message => $error );
-}
-
-sub print {
-  my ($self, @ret) = @_;
-  my $fh = $self->out_fh;
-  no warnings 'uninitialized';
-  print $fh "@ret";
-  print $fh "\n" if $self->term->ReadLine =~ /Gnu/;
 }
 
 =head1 NAME
