@@ -20,6 +20,7 @@ has 'done' => (
 
 sub run {
   my ($self) = @_;
+  $self->done(0); # make sure we loop at least once
   $self->run_once_safely until $self->done;
 }
 
