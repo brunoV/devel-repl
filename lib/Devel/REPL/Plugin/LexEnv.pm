@@ -31,6 +31,7 @@ around 'mangle_line' => sub {
   # Collate my declarations for all LP context vars then add '';
   # so an empty statement doesn't return anything (with a no warnings
   # to prevent "Useless use ..." warning)
+  no warnings 'uninitialized';
   return join('',
     'BEGIN { if ( $_REPL->_has_hints ) { ( $^H, %^H ) = @{ $_REPL->_hints } } }',
     ( map { "my $_;\n" } keys %{$lp->get_context('_')} ),

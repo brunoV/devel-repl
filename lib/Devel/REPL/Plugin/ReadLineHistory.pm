@@ -1,6 +1,6 @@
 # First cut at using the readline history directly rather than reimplementing
 # it. It does save history but it's a little crappy; still playing with it ;)
-# 
+#
 # epitaph, 22nd April 2007
 
 package Devel::REPL::Plugin::ReadLineHistory;
@@ -8,6 +8,8 @@ package Devel::REPL::Plugin::ReadLineHistory;
 use Devel::REPL::Plugin;
 use File::HomeDir;
 use File::Spec;
+
+with 'Devel::REPL::Plugin::Term::ReadLine';
 
 my $hist_file = $ENV{PERLREPL_HISTFILE} ||
     File::Spec->catfile(File::HomeDir->my_home, '.perlreplhist');
@@ -17,7 +19,7 @@ my $hist_file = $ENV{PERLREPL_HISTFILE} ||
 # PERLREPL_HISTLEN
 my $hist_len=$ENV{PERLREPL_HISTLEN} || 100;
 
-around 'run' => sub {
+around run => sub {
   my $orig=shift;
   my ($self, @args)=@_;
   $self->term->stifle_history($hist_len);

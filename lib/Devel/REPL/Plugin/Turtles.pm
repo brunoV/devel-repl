@@ -52,6 +52,7 @@ around 'formatted_eval' => sub {
 sub match_turtles {
   my ( $self, $line ) = @_;
 
+  no warnings 'uninitialized';
   foreach my $thingy ( @{ $self->turtles_matchers } ) {
     if ( reftype $thingy eq 'CODE' ) {
       if ( my @res = $self->$thingy($line) ) {

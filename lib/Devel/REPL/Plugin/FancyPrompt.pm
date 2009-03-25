@@ -3,6 +3,8 @@ package Devel::REPL::Plugin::FancyPrompt;
 use Devel::REPL::Plugin;
 use namespace::clean -except => [ 'meta' ];
 
+with 'Devel::REPL::Term::Prompt';
+
 has 'fancy_prompt' => (
   is => 'rw', lazy => 1,
 
@@ -63,7 +65,7 @@ Devel::REPL::Plugin::FancyPrompt - facilitate user-defined prompts
 
 =head1 SYNOPSIS
 
-    #!/usr/bin/perl 
+    #!/usr/bin/perl
 
     use lib './lib';
     use Devel::REPL;
