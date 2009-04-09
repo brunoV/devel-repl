@@ -24,6 +24,9 @@ requires 'B::Concise';
 requires 'Term::ANSIColor';
 requires 'Devel::Peek';
 
+# test
+requires 'Test::NoWarnings' => '0.084';
+
 feature 'Completion plugin - extensible tab completion',
     -default => 1,
     'PPI' => 0;
